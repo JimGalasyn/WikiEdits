@@ -10,7 +10,7 @@ namespace WikiEditStream
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             // Configure the client with credentials for connecting to Confluent.
             // Don't do this in production code. For more information, see 
@@ -23,7 +23,7 @@ namespace WikiEditStream
             clientConfig.SaslPassword="<api-secret>";
             clientConfig.SslCaLocation = "probe"; // /etc/ssl/certs
 
-            Produce("recent_changes", clientConfig).Wait();
+            await Produce("recent_changes", clientConfig);
             //Consume("recent_changes", clientConfig);
 
             // To demonstrate cross-platform production and consumption,
@@ -69,19 +69,15 @@ namespace WikiEditStream
                 // It will be disposed in the finally block.
                 producer = new ProducerBuilder<string, string>(config).Build();
 
-                // Create an HTTP client and request the event stream.
                 using(var httpClient = new HttpClient())
 
-                // Get the RC stream. 
                 using (var stream = await httpClient.GetStreamAsync(eventStreamsUrl))
                                 
-                // Open a reader to get the events from the service.
                 using (var reader = new StreamReader(stream))
                 {
                     // Read continuously until interrupted by Ctrl+C.
                     while (!reader.EndOfStream)
                     {
-                        // Get the next line from the service.
                         var line = reader.ReadLine();
 
                         // The Wikimedia service sends a few lines, but the lines
