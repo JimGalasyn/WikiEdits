@@ -36,7 +36,7 @@ namespace WikiEditStream
 
             // if(platform == System.PlatformID.Unix)
             // {
-            //     Produce("recent_changes", clientConfig).Wait();
+            //     Produce("recent_changes", clientConfig);
             //     //Consume("recent_changes", clientConfig);
             //     //Consume("pksqlc-gnponEDITS_PER_PAGE", clientConfig);
             // }
